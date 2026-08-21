@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import StudentInfo from '../components/StudentInfo.vue'
 import SurveyHeader from '../components/SurveyHeader.vue'
 import SurveyIntro from '../components/SurveyIntro.vue'
@@ -10,6 +10,13 @@ const studentInfo = reactive(
   Object.fromEntries(surveyData.studentFields.map((field) => [field.id, ''])),
 )
 const answers = reactive({})
+const submissionMessage = ref('')
+const submissionStatus = ref('')
+const totalQuestions = surveyData.sections.reduce(
+  (total, section) => total + section.questions.length,
+  0,
+)
+const answeredCount = computed(() => Object.keys(answers).length)
 
 function setStudentInfo(value) {
   Object.assign(studentInfo, value)
@@ -17,6 +24,20 @@ function setStudentInfo(value) {
 
 function setAnswer(questionId, value) {
   answers[questionId] = value
+  submissionMessage.value = ''
+  submissionStatus.value = ''
+}
+
+function submitSurvey() {
+  if (answeredCount.value < totalQuestions) {
+    submissionStatus.value = 'warning'
+    submissionMessage.value = `Vui lòng trả lời đủ ${totalQuestions} câu trước khi gửi. Hiện bạn đã trả lời ${answeredCount.value}/${totalQuestions} câu.`
+    return
+  }
+
+  submissionStatus.value = 'success'
+  submissionMessage.value =
+    'Đã kiểm tra đầy đủ câu trả lời. Đây là bản demo nên kết quả chưa được lưu lên máy chủ.'
 }
 </script>
 
@@ -29,7 +50,7 @@ function setAnswer(questionId, value) {
         :subtitle="surveyData.subtitle"
       />
 
-      <div class="survey-document__body">
+      <form class="survey-document__body" @submit.prevent="submitSurvey">
         <StudentInfo
           :fields="surveyData.studentFields"
           :model-value="studentInfo"
@@ -53,7 +74,31 @@ function setAnswer(questionId, value) {
           :answers="answers"
           @answer="setAnswer"
         />
-      </div>
+
+        <section class="survey-submit" aria-labelledby="survey-submit-title">
+          <div>
+            <h2 id="survey-submit-title" class="survey-submit__title">Hoàn thành khảo sát</h2>
+            <p class="survey-submit__progress">
+              Đã trả lời <strong>{{ answeredCount }}/{{ totalQuestions }}</strong> câu
+            </p>
+          </div>
+
+          <button class="survey-submit__button" type="submit">
+            <i class="bi bi-send-fill" aria-hidden="true"></i>
+            Gửi kết quả
+          </button>
+
+          <p
+            v-if="submissionMessage"
+            class="survey-submit__message"
+            :class="`survey-submit__message--${submissionStatus}`"
+            role="status"
+            aria-live="polite"
+          >
+            {{ submissionMessage }}
+          </p>
+        </section>
+      </form>
     </article>
   </main>
 </template>

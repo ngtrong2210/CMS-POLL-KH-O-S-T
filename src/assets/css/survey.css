@@ -371,6 +371,88 @@ select {
   min-width: 0;
 }
 
+.survey-submit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  margin-top: 52px;
+  padding: 28px 30px;
+  border: 1px solid rgba(0, 71, 65, 0.18);
+  border-radius: 4px;
+  background: var(--main-color-pale);
+}
+
+.survey-submit__title {
+  margin: 0 0 4px;
+  color: var(--main-color);
+  font-family: var(--font-family-serif);
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.survey-submit__progress {
+  margin: 0;
+  color: var(--text-color-light);
+  font-size: 16px;
+}
+
+.survey-submit__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 13px 26px;
+  border: 1px solid var(--main-color);
+  border-radius: 3px;
+  background: var(--main-color);
+  color: var(--white-color);
+  font-family: var(--font-family-sans);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.survey-submit__button:hover {
+  background: rgb(0, 88, 80);
+  box-shadow: 0 8px 20px rgba(0, 71, 65, 0.18);
+  transform: translateY(-1px);
+}
+
+.survey-submit__button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.survey-submit__button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.survey-submit__message {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 3px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.survey-submit__message--warning {
+  border: 1px solid rgba(156, 94, 0, 0.25);
+  background: rgb(255, 247, 232);
+  color: rgb(126, 75, 0);
+}
+
+.survey-submit__message--success {
+  border: 1px solid rgba(0, 71, 65, 0.2);
+  background: rgb(229, 241, 237);
+  color: var(--main-color);
+}
+
 @media (max-width: 767.98px) {
   body {
     font-size: 16px;
@@ -471,6 +553,22 @@ select {
   .survey-option {
     min-height: 58px;
     padding: 14px;
+  }
+
+  .survey-submit {
+    grid-template-columns: 1fr;
+    margin-top: 38px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .survey-submit__button {
+    width: 100%;
+  }
+
+  .survey-submit__message {
+    grid-column: auto;
+    text-align: left;
   }
 }
 
